@@ -21,14 +21,17 @@
      ------------------------------------------------------------------ */
   ["gesturestart", "gesturechange", "gestureend"].forEach((t) =>
     document.addEventListener(t, (e) => e.preventDefault(), { passive: false }));
-  document.addEventListener("touchmove", (e) => {
-    if (e.touches.length > 1 || (typeof e.scale === "number" && e.scale !== 1)) e.preventDefault();
-  }, { passive: false });
-  let lastTouchEnd = 0;
+  // Solo se bloquea el gesto de dos dedos; deslizar con un dedo nunca se toca.
+  document.addEventListener("touchmove", (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+  // Doble toque: solo si fue un toque quieto (no un deslizamiento), para no frenar el scroll.
+  let lastTap = 0, tx = 0, ty = 0, tMoved = false;
+  document.addEventListener("touchstart", (e) => { const t = e.touches[0]; tx = t.clientX; ty = t.clientY; tMoved = false; }, { passive: true });
+  document.addEventListener("touchmove", (e) => { const t = e.touches[0]; if (t && Math.hypot(t.clientX - tx, t.clientY - ty) > 10) tMoved = true; }, { passive: true });
   document.addEventListener("touchend", (e) => {
+    if (tMoved || e.touches.length) return;
     const now = Date.now();
-    if (now - lastTouchEnd < 320 && !e.target.closest("input, textarea, select, video")) e.preventDefault();
-    lastTouchEnd = now;
+    if (now - lastTap < 300 && !e.target.closest("input, textarea, select, video, button, a, summary")) e.preventDefault();
+    lastTap = now;
   }, { passive: false });
   window.addEventListener("wheel", (e) => { if (e.ctrlKey || e.metaKey) e.preventDefault(); }, { passive: false });
   window.addEventListener("keydown", (e) => {
@@ -296,6 +299,13 @@
   });
 
 
+  // Las ventanas de los pasos y del video completo quedan en la "capa superior" del navegador;
+  // el cronómetro se muda dentro de la ventana abierta para seguir visible encima del video.
+  function hostLive(dlg) {
+    const target = dlg || document.body;
+    if (live.parentElement !== target) target.appendChild(live);
+  }
+
   /* ---- Cronómetro flotante: se guarda, se arrastra y puede salir del navegador ---- */
   // 1) Persistencia: si recargas o vuelves más tarde, sigue donde estaba (y se sincroniza entre pestañas).
   function renderLive() { renderLiveBase(); renderFloat(); }
@@ -557,6 +567,7 @@
     sheet.classList.remove("closing");
     if (typeof sheet.showModal === "function") sheet.showModal(); else sheet.setAttribute("open", "");
     document.body.classList.add("locked");
+    hostLive(sheet);
     playSafe(sheetVideo);
     if (!opts.autoplay) $("#sheetClose").focus({ preventScroll: true });
     if (opts.focusTimer && sheetTimerEl) {
@@ -571,6 +582,7 @@
     sheet.classList.remove("closing");
     if (sheet.open) { if (typeof sheet.close === "function") sheet.close(); else sheet.removeAttribute("open"); }
     document.body.classList.remove("locked");
+    hostLive(null);
     sheetVideo.pause();
     sheetVideo.removeAttribute("src"); sheetVideo.load();
     if (sheetTimerEl) { Object.values(timers).forEach((t) => t.els.delete(sheetTimerEl)); sheetTimerEl = null; }
@@ -620,12 +632,14 @@
     playerVideo.src = "videos/coffee-completo.mp4";
     if (typeof player.showModal === "function") player.showModal(); else player.setAttribute("open", "");
     document.body.classList.add("locked");
+    hostLive(player);
     playSafe(playerVideo);
   }
   function closePlayer() {
     playerVideo.pause(); playerVideo.removeAttribute("src"); playerVideo.load();
     if (player.open) { if (typeof player.close === "function") player.close(); else player.removeAttribute("open"); }
     document.body.classList.remove("locked");
+    hostLive(sheet.open ? sheet : null);
   }
   $$("[data-full]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); openPlayer(); }));
   $("#playerClose").addEventListener("click", closePlayer);
