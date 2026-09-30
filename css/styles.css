@@ -664,3 +664,17 @@ dialog::backdrop { background: rgba(10, 8, 6, .45); -webkit-backdrop-filter: blu
 .sheet-media video { cursor: pointer; }
 @media (min-width: 768px) { .sheet-close { top: 18px; right: 18px; } }
 @media (min-width: 768px) { #sheetKicker, #sheetTitle { padding-right: 56px; } }
+
+/* ---- v1.0.4: video limpio con estado mínimo ---- */
+.player-media { position: relative; }
+.v-state { position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; pointer-events: none; opacity: 0; transform: scale(.85); transition: opacity .2s, transform .2s var(--ease);
+  background: rgba(20,16,13,.45) center / 26px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5.5v13l10.5-6.5z' fill='white'/%3E%3C/svg%3E");
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.is-paused .v-state, .is-ended .v-state { opacity: 1; transform: none; }
+.is-ended .v-state { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 5a7 7 0 1 1-6.6 4.7' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M4 4v5.5h5.5' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.v-sound { position: absolute; left: 12px; bottom: 12px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: #fff; background: rgba(20,16,13,.5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.v-sound[hidden] { display: none; }
+.v-sound svg { width: 20px; height: 20px; }
+.player video, .sheet-media video { cursor: pointer; }
+.sheet-media .v-sound { left: max(12px, calc(50% - var(--mh) * 9 / 32 + 12px)); }
+@media (min-width: 768px) { .sheet-media .v-sound { left: 30px; bottom: 30px; } .sheet-media .v-state { left: calc(16px + var(--mh) * 9 / 32); } }

@@ -389,26 +389,32 @@
 
   function showStep(n, opts = {}) {
     if (n < 1 || n > 10 || n === current) return;
-    const wasPlaying = !sheetVideo.paused && !sheetVideo.ended;
     fillStep(n);
     sheetContent.scrollTop = 0;
     if (!reduceMotion) {
       sheetContent.style.setProperty("--dir", (opts.dir || 1) * 14 + "px");
       sheetContent.classList.remove("swap"); void sheetContent.offsetWidth; sheetContent.classList.add("swap");
     }
-    quiet(sheetVideo, wasPlaying || opts.autoplay);
-    if (wasPlaying || opts.autoplay) playSafe(sheetVideo);
+    playSafe(sheetVideo);
     if (history.state && history.state.sheet) history.replaceState({ sheet: n }, "", "#paso-" + n);
   }
 
-  function playSafe(v) { try { const p = v.play(); if (p && p.catch) p.catch(() => { v.controls = true; }); } catch (_) { v.controls = true; } }
-  // El video arranca limpio, sin la capa oscura de los controles; aparecen al tocarlo o al pausar/terminar.
-  function quiet(v, on) { v.controls = !on; }
+  // Si el navegador no deja reproducir con sonido, reproduce en silencio y muestra el botón de sonido.
+  function playSafe(v) {
+    const muted = () => { v.muted = true; const q = v.play(); if (q && q.catch) q.catch(() => {}); };
+    try { v.muted = false; const p = v.play(); if (p && p.catch) p.catch((e) => { if (e && e.name === "NotAllowedError") muted(); }); } catch (_) { muted(); }
+  }
+  // Videos limpios: sin controles nativos (su capa oscura tapa la imagen).
+  // Arrancan solos al abrir; tocar el video pausa o reanuda; al terminar se detiene solo.
   [$("#sheetVideo"), $("#playerVideo")].forEach((v) => {
-    const reveal = () => { if (!v.controls) { v.controls = true; if (v.paused) playSafe(v); } };
-    v.addEventListener("click", reveal);
-    v.addEventListener("keydown", (e) => { if (!v.controls && (e.key === " " || e.key === "Enter")) { e.preventDefault(); reveal(); } });
-    v.addEventListener("pause", () => { if (v.currentTime > 0) v.controls = true; });
+    const box = v.parentElement;
+    const sound = $(".v-sound", box);
+    v.controls = false;
+    const sync = () => { box.classList.toggle("is-paused", v.paused && !v.ended && v.currentTime > 0); box.classList.toggle("is-ended", v.ended); sound.hidden = !v.muted; };
+    ["play", "pause", "ended", "volumechange", "emptied"].forEach((ev) => v.addEventListener(ev, sync));
+    v.addEventListener("click", () => { if (v.paused || v.ended) playSafe(v); else v.pause(); });
+    v.addEventListener("keydown", (e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); v.click(); } });
+    sound.addEventListener("click", () => { v.muted = false; if (v.paused) playSafe(v); });
   });
 
   function openSheet(n, opts = {}) {
@@ -420,9 +426,8 @@
     sheet.classList.remove("closing");
     if (typeof sheet.showModal === "function") sheet.showModal(); else sheet.setAttribute("open", "");
     document.body.classList.add("locked");
-    quiet(sheetVideo, !!opts.autoplay);
-    if (opts.autoplay) playSafe(sheetVideo);
-    else $("#sheetClose").focus({ preventScroll: true });
+    playSafe(sheetVideo);
+    if (!opts.autoplay) $("#sheetClose").focus({ preventScroll: true });
     if (opts.focusTimer && sheetTimerEl) {
       const btn = $(".t-start:not([hidden]), .t-pause:not([hidden])", sheetTimerEl);
       if (btn) setTimeout(() => btn.focus({ preventScroll: true }), 60);
@@ -484,7 +489,6 @@
     playerVideo.src = "videos/coffee-completo.mp4";
     if (typeof player.showModal === "function") player.showModal(); else player.setAttribute("open", "");
     document.body.classList.add("locked");
-    quiet(playerVideo, true);
     playSafe(playerVideo);
   }
   function closePlayer() {
