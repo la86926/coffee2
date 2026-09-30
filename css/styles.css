@@ -568,7 +568,7 @@ dialog::backdrop { background: rgba(10, 8, 6, .45); -webkit-backdrop-filter: blu
   .water { padding: 28px; }
   .water h3 { font-size: 30px; }
 
-  .tools { grid-auto-flow: row; grid-template-columns: repeat(5, 1fr); overflow: visible; margin: 0; padding: 0; gap: 14px; }
+  .tools { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); overflow: visible; margin: 0; padding: 0; gap: 14px; }
   .tool-name { font-size: 14.5px; }
 
   .progress { top: calc(var(--safe-t) + 80px); }
@@ -609,6 +609,8 @@ dialog::backdrop { background: rgba(10, 8, 6, .45); -webkit-backdrop-filter: blu
    Escritorio amplio (≥ 1180 px): los 10 pasos en 5 × 2
    ========================================================================== */
 @media (min-width: 1180px) {
+  .tools { grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .tool-name { font-size: 14px; }
   .steps { grid-template-columns: repeat(5, 1fr); gap: 18px; }
   .step { display: flex; flex-direction: column; padding: 0; border-radius: var(--r-card); overflow: hidden; }
   .step-media { border-radius: 0; }

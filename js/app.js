@@ -95,7 +95,7 @@
     reveals.forEach((el) => ro.observe(el));
   } else reveals.forEach((el) => el.classList.add("in"));
 
-  /* ------------------------------------------------------------------ Los 5 utensilios */
+  /* ------------------------------------------------------------------ Los 6 utensilios */
   const tools = $$(".tool");
   const tip = $("#benchTip");
   const hotspots = $$(".hotspot");
