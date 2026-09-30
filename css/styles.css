@@ -160,7 +160,7 @@ strong, b { font-weight: 650; }
 /* ---------- Barra inferior (móvil) ---------- */
 .tabbar {
   position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(10px + var(--safe-b));
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; padding: 6px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 6px;
   border-radius: 26px; background: var(--glass-strong);
   -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px);
   box-shadow: var(--shadow-2), inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent);
@@ -759,3 +759,4 @@ dialog::backdrop { background: rgba(10, 8, 6, .45); -webkit-backdrop-filter: blu
 .bench-photo img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; pointer-events: none; }
 .bench-row, .bench-n { touch-action: pan-y; -webkit-user-select: none; user-select: none; }
 .sheet .live, .player .live { z-index: 60; }
+.tabbar a span { white-space: nowrap; }

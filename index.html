@@ -22,12 +22,12 @@
 <link rel="icon" href="icons/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preload" as="image" href="img/utensilios-1000.webp?v=3" imagesrcset="img/utensilios-640.webp?v=3 640w, img/utensilios-1000.webp?v=3 1000w, img/utensilios-1600.webp?v=3 1600w" imagesizes="(min-width: 1024px) 56vw, 100vw" fetchpriority="high">
-<link rel="stylesheet" href="css/styles.css?v=1.0.6">
+<link rel="stylesheet" href="css/styles.css?v=1.0.7">
 <script>
   /* Tema guardado: se aplica antes de pintar para evitar parpadeos. */
   (function(){try{var t=localStorage.getItem("mc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}document.documentElement.classList.add("js");})();
 </script>
-<script defer src="js/app.js?v=1.0.6"></script>
+<script defer src="js/app.js?v=1.0.7"></script>
 </head>
 <body>
 <svg class="sprite" aria-hidden="true" focusable="false">
@@ -62,7 +62,7 @@
     </a>
     <nav class="topnav" aria-label="Secciones">
       <a href="#utensilios" data-nav="utensilios">Utensilios</a>
-      <a href="#pasos" data-nav="pasos">Paso a paso</a>
+      <a href="#pasos" data-nav="pasos">Explicación</a>
       <a href="#completo" data-nav="completo">Video completo</a>
       <a href="#otros" data-nav="otros">Otros</a>
     </nav>
@@ -89,7 +89,7 @@
       <div class="choices">
         <a class="choice" href="#pasos">
           <span class="choice-ic"><svg aria-hidden="true"><use href="#i-list"/></svg></span>
-          <span class="choice-t">Paso a paso</span>
+          <span class="choice-t">Explicación</span>
           <span class="choice-s">10 pasos, cada uno con su video</span>
         </a>
         <a class="choice" href="#completo" data-full>
@@ -132,7 +132,7 @@
   <div class="wrap">
     <header class="sec-head reveal">
       <span class="sec-n" aria-hidden="true">02</span>
-      <h2 id="pasosTitle">Paso a paso</h2>
+      <h2 id="pasosTitle">Explicación</h2>
       <p class="sec-sub">Diez pasos en orden. Toca la foto para ver el video.</p>
     </header>
 
@@ -441,7 +441,7 @@
     <header class="sec-head reveal">
       <span class="sec-n" aria-hidden="true">04</span>
       <h2 id="otrosTitle">Otros</h2>
-      <p class="sec-sub">Consejos de otras personas. Son opcionales: úsalos solo si quieres.</p>
+      <p class="sec-sub">Consejos de otras personas. Son opcionales: úsalos si es que lo deseas.</p>
     </header>
     <details class="otros-box reveal">
       <summary><span>Ver los consejos</span><span class="otros-count">8</span></summary>
@@ -502,8 +502,8 @@
 <!-- Barra inferior tipo app (móvil) -->
 <nav class="tabbar" aria-label="Secciones">
   <a href="#utensilios" data-nav="utensilios"><svg aria-hidden="true"><use href="#i-tools"/></svg><span>Utensilios</span></a>
-  <a href="#pasos" data-nav="pasos"><svg aria-hidden="true"><use href="#i-list"/></svg><span>Pasos</span></a>
-  <a href="#completo" data-nav="completo"><svg aria-hidden="true"><use href="#i-film"/></svg><span>Video</span></a>
+  <a href="#pasos" data-nav="pasos"><svg aria-hidden="true"><use href="#i-list"/></svg><span>Explicación</span></a>
+  <a href="#completo" data-nav="completo"><svg aria-hidden="true"><use href="#i-film"/></svg><span>Video completo</span></a>
   <a href="#otros" data-nav="otros"><svg aria-hidden="true"><use href="#i-branch"/></svg><span>Otros</span></a>
 </nav>
 
