@@ -384,8 +384,9 @@
     }
     // Video (MP4 local, se carga solo al abrir)
     sheetVideo.pause();
-    sheetVideo.poster = "img/paso-" + n + ".webp";
-    sheetVideo.src = "videos/coffee" + n + ".mp4";
+    const mv = el.dataset.v ? "?v=" + el.dataset.v : "";
+    sheetVideo.poster = "img/paso-" + n + ".webp" + mv;
+    sheetVideo.src = "videos/coffee" + n + ".mp4" + mv;
     sheetVideo.setAttribute("aria-label", "Video del paso " + n + ": " + titleOf(n));
     $("#sheetYt").href = "https://youtube.com/shorts/" + el.dataset.yt;
     // Navegación

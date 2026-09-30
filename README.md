@@ -21,7 +21,7 @@ videos/                 coffee1.mp4 … coffee10.mp4 + coffee-completo.mp4 (opti
 ## Decisiones
 
 - **Videos:** MP4 locales H.264 540×960, `faststart`, `preload="none"`. Solo se cargan
-  cuando el visitante abre un paso. 11.7 MB en total (los originales pesaban ~183 MB).
+  cuando el visitante abre un paso. 11.6 MB en total (los originales pesaban ~183 MB).
   Cada paso enlaza además a su versión en YouTube.
 - **Portadas:** fotogramas elegidos de cada video (p. ej. paso 1 a 2.8 s, paso 4 a 16.8 s),
   exportados en WebP en tres tamaños: miniatura, tarjeta 4:5 y póster 9:16.
