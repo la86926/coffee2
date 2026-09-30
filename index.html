@@ -22,12 +22,12 @@
 <link rel="icon" href="icons/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preload" as="image" href="img/utensilios-1000.webp" imagesrcset="img/utensilios-640.webp 640w, img/utensilios-1000.webp 1000w, img/utensilios-1600.webp 1600w" imagesizes="(min-width: 1024px) 56vw, 100vw" fetchpriority="high">
-<link rel="stylesheet" href="css/styles.css?v=1.0.2">
+<link rel="stylesheet" href="css/styles.css?v=1.0.3">
 <script>
   /* Tema guardado: se aplica antes de pintar para evitar parpadeos. */
   (function(){try{var t=localStorage.getItem("mc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}document.documentElement.classList.add("js");})();
 </script>
-<script defer src="js/app.js?v=1.0.2"></script>
+<script defer src="js/app.js?v=1.0.3"></script>
 </head>
 <body>
 <svg class="sprite" aria-hidden="true" focusable="false">
@@ -106,9 +106,6 @@
         <button class="hotspot" type="button" data-tool="5" style="--x:88%;--y:56%" aria-label="5. Cacerola grande" aria-expanded="false" aria-controls="benchTip">5</button>
       </div>
       <div class="bench-tip" id="benchTip" role="status" aria-live="polite" hidden></div>
-      <figcaption>
-        <span>Cacerola pequeña</span><i aria-hidden="true">→</i><span>Jarro rojo</span><i aria-hidden="true">→</i><span>Prensa</span><i aria-hidden="true">→</i><span>Tetera</span><i aria-hidden="true">→</i><span>Cacerola grande</span><i aria-hidden="true">→</i><span>Cuchara</span>
-      </figcaption>
     </figure>
   </div>
 </section>
@@ -118,10 +115,9 @@
   <div class="wrap">
     <header class="section-head reveal">
       <div>
-        <p class="eyebrow">Mi método</p>
         <h2 id="metodoTitle">Dos aguas.<br class="br-sm"> Dos funciones.</h2>
       </div>
-      <p class="section-intro">Todo se organiza alrededor de esta idea: una agua prepara la prensa; la otra prepara el café.</p>
+      <p class="section-intro">Una prepara la prensa. La otra, el café.</p>
     </header>
 
     <div class="waters">
@@ -133,7 +129,6 @@
         <h3>Cacerola pequeña</h3>
         <p class="water-kind">Agua del caño · <strong>no se bebe</strong></p>
         <p class="water-use">Solo sirve para calentar la prensa francesa y enjuagar sus piezas con agua muy caliente.</p>
-        <p class="water-flow">Prensa <i aria-hidden="true">→</i> enjuague <i aria-hidden="true">→</i> se retira</p>
       </article>
       <article class="water water-drink reveal">
         <div class="water-top">
@@ -143,7 +138,6 @@
         <h3>Cacerola grande</h3>
         <p class="water-kind">Agua limpia que compro <strong>para beber</strong></p>
         <p class="water-use">Es la única agua con la que preparo el café. Queda al mínimo mientras trabajo con la prensa.</p>
-        <p class="water-flow">Tetera <i aria-hidden="true">→</i> café <i aria-hidden="true">→</i> la cacerola vacía puede recibir el café</p>
       </article>
     </div>
   </div>
@@ -154,10 +148,9 @@
   <div class="wrap">
     <header class="section-head reveal">
       <div>
-        <p class="eyebrow">Antes de empezar</p>
         <h2 id="utensiliosTitle">Los 6 utensilios</h2>
       </div>
-      <p class="section-intro">Siempre en este orden, de izquierda a derecha: así tengo preparada mi zona de trabajo para hacer el café eficientemente y tener todo a mano. <span class="hint-hover">Pasa el cursor sobre cada uno.</span><span class="hint-touch">Toca cada uno para ver su función.</span></p>
+      <p class="section-intro">En este orden, de izquierda a derecha. <span class="hint-hover">Pasa el cursor para ver su función.</span><span class="hint-touch">Toca uno para ver su función.</span></p>
     </header>
 
     <ol class="tools" id="tools">
@@ -218,10 +211,8 @@
   <div class="wrap">
     <header class="section-head reveal">
       <div>
-        <p class="eyebrow">De un vistazo · o en detalle</p>
         <h2 id="pasosTitle">Mi preparación en 10 pasos</h2>
       </div>
-      <p class="section-intro">Repasa los recordatorios sin reproducir nada. Abre cualquier paso para ver su video y la explicación completa.</p>
     </header>
 
     <div class="progress" aria-hidden="true">
@@ -240,14 +231,13 @@
           <span class="dur" aria-hidden="true">5 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 01</p>
           <h3 class="step-title">Encender las dos aguas</h3>
           <ul class="remind remind-waters">
             <li class="w-tap"><b>Pequeña:</b> agua del caño · fuego máximo</li>
             <li class="w-drink"><b>Grande:</b> agua para beber · fuego mínimo</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Enciendo <strong>al mismo tiempo</strong> dos cacerolas.</p>
               <div class="mini-waters">
@@ -269,7 +259,6 @@
           <span class="dur" aria-hidden="true">8 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 02</p>
           <h3 class="step-title">Calentar y enjuagar la prensa</h3>
           <ul class="remind">
             <li>Agua pequeña → prensa</li>
@@ -277,7 +266,7 @@
             <li>Luego arriba</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Cuando hierve el agua de la cacerola pequeña, la vierto dentro de la prensa francesa y coloco la tapa con el émbolo.</p>
               <p>Aprovecho esa misma agua muy caliente para enjuagar el conjunto que llamo <strong>“filtros”</strong>: el filtro, las placas, la pieza en forma de cruz y el resorte.</p>
@@ -297,7 +286,6 @@
           <span class="dur" aria-hidden="true">3 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 03</p>
           <h3 class="step-title">Calentar la jarra 2 minutos</h3>
           <ul class="remind">
             <li><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Celular: 02:00</li>
@@ -305,7 +293,7 @@
           </ul>
           <div class="timer timer-compact" data-timer="t3"></div>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>En <strong>mi celular</strong> pongo un cronómetro de <strong>2 minutos</strong>. Durante ese tiempo dejo el agua caliente dentro de la prensa francesa para que la jarra tome temperatura.</p>
               <p>Cuando termina el tiempo, retiro la tapa junto con el émbolo y los filtros. Como están calientes y no quiero apoyarlos directamente sobre la mesa, coloco ese conjunto <strong>dentro del jarro rojo</strong> que tengo preparado al lado.</p>
@@ -326,7 +314,6 @@
           <span class="dur" aria-hidden="true">28 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 04</p>
           <h3 class="step-title">Añadir y nivelar el café</h3>
           <ul class="remind">
             <li>2–3 cucharas grandes</li>
@@ -334,7 +321,7 @@
             <li>Sin “cerro”</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Echo aproximadamente <strong>de 2 a 3 cucharas grandes</strong> de café dentro de la prensa francesa.</p>
               <p>Después sujeto la jarra y la <strong>agito suavemente</strong> para distribuir el café de forma horizontal.</p>
@@ -353,14 +340,13 @@
           <span class="dur" aria-hidden="true">10 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 05</p>
           <h3 class="step-title">Verter el agua limpia</h3>
           <ul class="remind">
             <li>Cacerola grande → tetera → prensa</li>
             <li>Vertido circular</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Para este momento ya debería haber hervido el agua limpia de la cacerola grande. Retiro esa cacerola y la coloco <strong>al extremo derecho</strong> de mi zona de trabajo.</p>
               <p>Vierto la cantidad necesaria de esa agua limpia dentro de la <strong>tetera</strong>.</p>
@@ -380,14 +366,13 @@
           <span class="dur" aria-hidden="true">10 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 06</p>
           <h3 class="step-title">Mezclar con cuchara</h3>
           <ul class="remind">
             <li>Cuchara</li>
             <li>Solo café + agua</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Cuando termino de echar el agua con la tetera, tomo una <strong>cuchara</strong> y mezclo el café con un movimiento parecido al que haría una persona al endulzar una bebida.</p>
               <div class="why"><p class="why-t">Importante</p><p><strong>No agrego ningún ingrediente</strong>: ni azúcar ni leche. Solamente estoy mezclando café + agua con la cuchara.</p></div>
@@ -405,14 +390,13 @@
           <span class="dur" aria-hidden="true">4 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 07</p>
           <h3 class="step-title">Tapar sin prensar</h3>
           <ul class="remind">
             <li>Tapa la prensa</li>
             <li>No bajes el émbolo: déjalo por encima del café</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p><strong>Inmediatamente después</strong> vuelvo a colocar la tapa de la prensa francesa.</p>
               <p><strong>No bajo el émbolo para nada</strong>. Solo lo dejo descender hasta quedar por encima del café, <strong>sin rozarlo y sin acercarlo a él</strong>.</p>
@@ -431,7 +415,6 @@
           <span class="dur" aria-hidden="true">3 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 08</p>
           <h3 class="step-title">Infusionar 4–5 minutos</h3>
           <ul class="remind">
             <li><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Celular: 04:00</li>
@@ -439,7 +422,7 @@
           </ul>
           <div class="timer timer-compact" data-timer="t8"></div>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Uso nuevamente <strong>mi celular</strong> y configuro un cronómetro de entre 4 y 5 minutos. <strong>Normalmente pongo 4 minutos.</strong></p>
               <p>Durante ese tiempo dejo infusionar el café. No sigo bajando el émbolo.</p>
@@ -459,14 +442,13 @@
           <span class="dur" aria-hidden="true">10 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 09</p>
           <h3 class="step-title">Bajar el émbolo</h3>
           <ul class="remind">
             <li>Baja el émbolo</li>
             <li>Detente 1 dedo antes del fondo</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Cuando pasan aproximadamente los 4 minutos, <strong>bajo lentamente</strong> el émbolo.</p>
               <p>Algunas personas lo bajan hasta que llega por completo al fondo. Yo no hago exactamente eso: prefiero <strong>detenerlo aproximadamente a la distancia del grosor de un dedo</strong> antes de tocar el fondo.</p>
@@ -485,7 +467,6 @@
           <span class="dur" aria-hidden="true">10 s</span>
         </a>
         <div class="step-body">
-          <p class="kicker">Paso 10</p>
           <h3 class="step-title">Servir de inmediato</h3>
           <ul class="remind">
             <li>Sostén el émbolo</li>
@@ -493,7 +474,7 @@
             <li>No dejes el café dentro</li>
           </ul>
           <details class="full">
-            <summary>Ver explicación completa</summary>
+            <summary>Explicación completa</summary>
             <div class="full-content">
               <p>Cuando termino de prensar, <strong>vacío inmediatamente</strong> el café. Mientras lo hago, <strong>sostengo el émbolo</strong>.</p>
               <p>Puedo vaciarlo en la cacerola grande —que para ese momento ya está vacía— o en cualquier recipiente adecuado que soporte café casi hirviendo.</p>
@@ -517,12 +498,8 @@
         <span class="dur" aria-hidden="true">1:32</span>
       </a>
       <div class="full-copy">
-        <p class="eyebrow">Preparación completa</p>
         <h2 id="completoTitle">Los 10 pasos, de principio a fin</h2>
-        <p class="full-lead">Toda mi secuencia en una sola reproducción de 1 min 32 s. Los videos de cada paso siguen disponibles en su tarjeta.</p>
-        <ol class="step-dots" aria-label="Ir a un paso">
-          <li><a href="#paso-1" data-open="1" aria-label="Paso 1">1</a></li><li><a href="#paso-2" data-open="2" aria-label="Paso 2">2</a></li><li><a href="#paso-3" data-open="3" aria-label="Paso 3">3</a></li><li><a href="#paso-4" data-open="4" aria-label="Paso 4">4</a></li><li><a href="#paso-5" data-open="5" aria-label="Paso 5">5</a></li><li><a href="#paso-6" data-open="6" aria-label="Paso 6">6</a></li><li><a href="#paso-7" data-open="7" aria-label="Paso 7">7</a></li><li><a href="#paso-8" data-open="8" aria-label="Paso 8">8</a></li><li><a href="#paso-9" data-open="9" aria-label="Paso 9">9</a></li><li><a href="#paso-10" data-open="10" aria-label="Paso 10">10</a></li>
-        </ol>
+        <p class="full-lead">Toda la preparación en un solo video de 1:32.</p>
         <div class="actions">
           <a class="btn btn-light" href="videos/coffee-completo.mp4" data-full><svg aria-hidden="true"><use href="#i-play"/></svg>Ver preparación completa</a>
           <a class="btn-link-light" href="https://youtube.com/shorts/NMrSZJ5kMnU" target="_blank" rel="noopener noreferrer">También en YouTube<svg aria-hidden="true"><use href="#i-out"/></svg></a>
@@ -541,48 +518,48 @@
           <p class="alt-tag">Fuera de mi método</p>
           <h2 id="altTitle">Alternativas</h2>
         </div>
-        <p class="section-intro">Otras maneras conocidas de preparar café con prensa francesa. <strong>No forman parte de mi procedimiento</strong>; cada tarjeta indica de dónde proviene.</p>
+        <p class="section-intro">Otras formas conocidas. <strong>No son parte de mi método.</strong></p>
       </header>
       <ul class="alts">
         <li class="alt reveal">
           <h3>Pesar café y agua</h3>
           <p>En lugar de cucharas, se usa balanza. Ejemplos publicados: 30 g de café por 350 g de agua (≈ 1:12), cerca de 1:15, o 30 g por 500 g (≈ 1:17).</p>
-          <p class="src">Alternativa · <a href="https://bluebottlecoffee.com/us/eng/brew-guides/french-press" target="_blank" rel="noopener noreferrer">Blue Bottle</a>, <a href="https://www.intelligentsia.com/pages/french-press" target="_blank" rel="noopener noreferrer">Intelligentsia</a>, <a href="https://www.youtube.com/watch?v=st571DYYTR8" target="_blank" rel="noopener noreferrer">James Hoffmann</a></p>
+          <p class="src">Fuente: <a href="https://bluebottlecoffee.com/us/eng/brew-guides/french-press" target="_blank" rel="noopener noreferrer">Blue Bottle</a>, <a href="https://www.intelligentsia.com/pages/french-press" target="_blank" rel="noopener noreferrer">Intelligentsia</a>, <a href="https://www.youtube.com/watch?v=st571DYYTR8" target="_blank" rel="noopener noreferrer">James Hoffmann</a></p>
         </li>
         <li class="alt reveal">
           <h3>Controlar la temperatura</h3>
           <p>Hay guías que miden el agua: Blue Bottle indica 205–210 °F (≈ 96–99 °C). Como referencia general, la SCA pide que el café alcance entre 90 y 96 °C en las cafeteras que certifica.</p>
-          <p class="src">Alternativa · <a href="https://bluebottlecoffee.com/us/eng/brew-guides/french-press" target="_blank" rel="noopener noreferrer">Blue Bottle</a>, <a href="https://sca.coffee/s/SCA_Standard_310-2021.pdf" target="_blank" rel="noopener noreferrer">SCA</a></p>
+          <p class="src">Fuente: <a href="https://bluebottlecoffee.com/us/eng/brew-guides/french-press" target="_blank" rel="noopener noreferrer">Blue Bottle</a>, <a href="https://sca.coffee/s/SCA_Standard_310-2021.pdf" target="_blank" rel="noopener noreferrer">SCA</a></p>
         </li>
         <li class="alt reveal">
           <h3>Preinfusión</h3>
           <p>Primero se vierte solo el agua necesaria para empapar todo el café, se espera 1 minuto y luego se completa el vertido.</p>
-          <p class="src">Alternativa · <a href="https://www.intelligentsia.com/pages/french-press" target="_blank" rel="noopener noreferrer">Intelligentsia</a></p>
+          <p class="src">Fuente: <a href="https://www.intelligentsia.com/pages/french-press" target="_blank" rel="noopener noreferrer">Intelligentsia</a></p>
         </li>
         <li class="alt reveal">
           <h3>Remover durante la infusión</h3>
           <p>Tras romper la capa superior, se remueve cada 10–30 s y se deja de remover 1 minuto antes del final; tiempo total de 4 a 6 minutos.</p>
-          <p class="src">Alternativa · <a href="https://www.intelligentsia.com/pages/french-press" target="_blank" rel="noopener noreferrer">Intelligentsia</a></p>
+          <p class="src">Fuente: <a href="https://www.intelligentsia.com/pages/french-press" target="_blank" rel="noopener noreferrer">Intelligentsia</a></p>
         </li>
         <li class="alt reveal">
           <h3>Romper la costra</h3>
           <p>Hacia los 4 minutos se remueve la costra de la superficie con una cuchara y se retiran la espuma y las partículas que flotan con dos cucharas.</p>
-          <p class="src">Alternativa · <a href="https://www.youtube.com/watch?v=st571DYYTR8" target="_blank" rel="noopener noreferrer">James Hoffmann</a></p>
+          <p class="src">Fuente: <a href="https://www.youtube.com/watch?v=st571DYYTR8" target="_blank" rel="noopener noreferrer">James Hoffmann</a></p>
         </li>
         <li class="alt reveal">
           <h3>Reposo largo</h3>
           <p>Después de retirar la espuma se espera al menos 5 minutos (hasta 8) para que las partículas se asienten, y el émbolo solo se baja hasta la superficie.</p>
-          <p class="src">Alternativa · <a href="https://www.youtube.com/watch?v=st571DYYTR8" target="_blank" rel="noopener noreferrer">James Hoffmann</a></p>
+          <p class="src">Fuente: <a href="https://www.youtube.com/watch?v=st571DYYTR8" target="_blank" rel="noopener noreferrer">James Hoffmann</a></p>
         </li>
         <li class="alt reveal">
           <h3>Prensado lento</h3>
           <p>El émbolo se baja con presión constante durante unos 20 segundos y el café sobrante se pasa a otro recipiente para que no siga extrayéndose.</p>
-          <p class="src">Alternativa · <a href="https://bluebottlecoffee.com/us/eng/brew-guides/french-press" target="_blank" rel="noopener noreferrer">Blue Bottle</a></p>
+          <p class="src">Fuente: <a href="https://bluebottlecoffee.com/us/eng/brew-guides/french-press" target="_blank" rel="noopener noreferrer">Blue Bottle</a></p>
         </li>
         <li class="alt reveal">
           <h3>Filtrado adicional</h3>
           <p>Pasar el café ya prensado por un filtro de papel elimina casi todo el sedimento, aunque también parte de los aceites que dan cuerpo a la prensa francesa.</p>
-          <p class="src">Alternativa · <a href="https://completehomebarista.com/faqs/brewing-methods/french-press/reduce-sediment-french-press/" target="_blank" rel="noopener noreferrer">Complete Home Barista</a></p>
+          <p class="src">Fuente: <a href="https://completehomebarista.com/faqs/brewing-methods/french-press/reduce-sediment-french-press/" target="_blank" rel="noopener noreferrer">Complete Home Barista</a></p>
         </li>
       </ul>
     </div>
@@ -621,26 +598,25 @@
 <!-- Hoja de detalle de paso -->
 <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
   <div class="sheet-inner">
+    <button type="button" class="sheet-close" id="sheetClose" aria-label="Cerrar"><svg><use href="#i-close"/></svg></button>
     <div class="sheet-media">
-      <video id="sheetVideo" playsinline controls preload="none" controlslist="nodownload noremoteplayback" disablepictureinpicture></video>
+      <video id="sheetVideo" playsinline preload="none" tabindex="0" controlslist="nodownload noremoteplayback" disablepictureinpicture></video>
     </div>
     <div class="sheet-content" id="sheetContent">
       <div class="sheet-grab" aria-hidden="true"></div>
-      <div class="sheet-top">
-        <p class="kicker" id="sheetKicker">Paso 01 de 10</p>
-        <button type="button" class="icon-btn" id="sheetClose" aria-label="Cerrar"><svg><use href="#i-close"/></svg></button>
-      </div>
+      <p class="kicker" id="sheetKicker">Paso 01 de 10</p>
       <h2 id="sheetTitle">Paso</h2>
-      <ul class="remind chips" id="sheetRemind"></ul>
       <div class="sheet-timer" id="sheetTimer"></div>
       <div class="sheet-body" id="sheetBody"></div>
-      <div class="sheet-meta" id="sheetMeta"></div>
-      <a class="yt-link" id="sheetYt" href="#" target="_blank" rel="noopener noreferrer">Este paso también está en YouTube<svg aria-hidden="true"><use href="#i-out"/></svg></a>
+      <details class="more">
+        <summary>Más detalles</summary>
+        <div class="sheet-meta" id="sheetMeta"></div>
+        <a class="yt-link" id="sheetYt" href="#" target="_blank" rel="noopener noreferrer">Ver en YouTube<svg aria-hidden="true"><use href="#i-out"/></svg></a>
+      </details>
       <nav class="sheet-nav" aria-label="Navegar entre pasos">
         <button type="button" class="nav-prev" id="prevStep"><svg aria-hidden="true"><use href="#i-left"/></svg><span><small>Anterior</small><b id="prevTitle"></b></span></button>
         <button type="button" class="nav-next" id="nextStep"><span><small>Siguiente</small><b id="nextTitle"></b></span><svg aria-hidden="true"><use href="#i-right"/></svg></button>
       </nav>
-      <ol class="sheet-dots" id="sheetDots" aria-label="Pasos"></ol>
     </div>
   </div>
 </dialog>
@@ -652,7 +628,7 @@
       <h2 id="playerTitle">Preparación completa</h2>
       <button type="button" class="icon-btn" id="playerClose" aria-label="Cerrar video"><svg><use href="#i-close"/></svg></button>
     </div>
-    <video id="playerVideo" playsinline controls preload="none" poster="img/completo.webp" controlslist="nodownload noremoteplayback"></video>
+    <video id="playerVideo" playsinline preload="none" tabindex="0" poster="img/completo.webp" controlslist="nodownload noremoteplayback"></video>
   </div>
 </dialog>
 
@@ -660,7 +636,7 @@
   <div class="t-main">
     <svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle class="ring-bg" cx="18" cy="18" r="15.5"/><circle class="ring-fg" cx="18" cy="18" r="15.5" pathLength="100"/></svg>
     <span class="t-display" data-display>00:00</span>
-    <span class="t-note"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>Apoyo · yo uso mi celular</span></span>
+    <span class="t-note"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>Yo uso mi celular</span></span>
   </div>
   <div class="t-choice" role="radiogroup" aria-label="Duración de la infusión" hidden>
     <button type="button" role="radio" data-set="240" aria-checked="true">4 min<small> · mi opción</small></button>

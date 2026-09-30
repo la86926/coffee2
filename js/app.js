@@ -336,14 +336,7 @@
   let current = 0;
   let sheetTimerEl = null;
 
-  for (let i = 1; i <= 10; i++) {
-    const li = document.createElement("li");
-    const b = document.createElement("button");
-    b.type = "button"; b.textContent = i; b.dataset.go = i;
-    b.setAttribute("aria-label", "Paso " + i);
-    li.appendChild(b); sheetDots.appendChild(li);
-  }
-  sheetDots.addEventListener("click", (e) => { const b = e.target.closest("[data-go]"); if (b) showStep(Number(b.dataset.go), { dir: Number(b.dataset.go) > current ? 1 : -1 }); });
+
 
   const stepEl = (n) => document.getElementById("paso-" + n);
   const titleOf = (n) => $(".step-title", stepEl(n)).textContent;
@@ -353,10 +346,6 @@
     const two = pad(n);
     $("#sheetKicker").textContent = "Paso " + two + " de 10";
     $("#sheetTitle").textContent = titleOf(n);
-    // Recordatorio rápido
-    const remind = $("#sheetRemind");
-    remind.innerHTML = "";
-    $$(".remind > li", el).forEach((li) => { const c = li.cloneNode(true); remind.appendChild(c); });
     // Explicación completa
     sheetBody.innerHTML = "";
     const full = $(".full-content", el).cloneNode(true);
@@ -393,7 +382,7 @@
     prevBtn.disabled = n === 1; nextBtn.disabled = n === 10;
     $("#prevTitle").textContent = n > 1 ? titleOf(n - 1) : "—";
     $("#nextTitle").textContent = n < 10 ? titleOf(n + 1) : "—";
-    $$("[data-go]", sheetDots).forEach((b) => { if (Number(b.dataset.go) === n) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+    sheetDots && $$("[data-go]", sheetDots).forEach((b) => { if (Number(b.dataset.go) === n) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
     current = n;
     setProgress(n);
   }
@@ -407,11 +396,20 @@
       sheetContent.style.setProperty("--dir", (opts.dir || 1) * 14 + "px");
       sheetContent.classList.remove("swap"); void sheetContent.offsetWidth; sheetContent.classList.add("swap");
     }
+    quiet(sheetVideo, wasPlaying || opts.autoplay);
     if (wasPlaying || opts.autoplay) playSafe(sheetVideo);
     if (history.state && history.state.sheet) history.replaceState({ sheet: n }, "", "#paso-" + n);
   }
 
-  function playSafe(v) { try { const p = v.play(); if (p && p.catch) p.catch(() => {}); } catch (_) {} }
+  function playSafe(v) { try { const p = v.play(); if (p && p.catch) p.catch(() => { v.controls = true; }); } catch (_) { v.controls = true; } }
+  // El video arranca limpio, sin la capa oscura de los controles; aparecen al tocarlo o al pausar/terminar.
+  function quiet(v, on) { v.controls = !on; }
+  [$("#sheetVideo"), $("#playerVideo")].forEach((v) => {
+    const reveal = () => { if (!v.controls) { v.controls = true; if (v.paused) playSafe(v); } };
+    v.addEventListener("click", reveal);
+    v.addEventListener("keydown", (e) => { if (!v.controls && (e.key === " " || e.key === "Enter")) { e.preventDefault(); reveal(); } });
+    v.addEventListener("pause", () => { if (v.currentTime > 0) v.controls = true; });
+  });
 
   function openSheet(n, opts = {}) {
     if (sheet.open) { showStep(n, opts); return; }
@@ -422,6 +420,7 @@
     sheet.classList.remove("closing");
     if (typeof sheet.showModal === "function") sheet.showModal(); else sheet.setAttribute("open", "");
     document.body.classList.add("locked");
+    quiet(sheetVideo, !!opts.autoplay);
     if (opts.autoplay) playSafe(sheetVideo);
     else $("#sheetClose").focus({ preventScroll: true });
     if (opts.focusTimer && sheetTimerEl) {
@@ -485,6 +484,7 @@
     playerVideo.src = "videos/coffee-completo.mp4";
     if (typeof player.showModal === "function") player.showModal(); else player.setAttribute("open", "");
     document.body.classList.add("locked");
+    quiet(playerVideo, true);
     playSafe(playerVideo);
   }
   function closePlayer() {
