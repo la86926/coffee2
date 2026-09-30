@@ -1,23 +1,17 @@
 /* Service worker ligero: la guía abre sin conexión (textos, portadas y
    cronómetros). Los videos no se guardan en caché: se piden a la red. */
-const VERSION = "mi-cafe-v1.0.4";
+const VERSION = "mi-cafe-v1.0.5";
 const SHELL = [
   "./",
   "index.html",
-  "css/styles.css?v=1.0.4",
-  "js/app.js?v=1.0.4",
+  "css/styles.css?v=1.0.5",
+  "js/app.js?v=1.0.5",
   "manifest.webmanifest",
   "icons/icon.svg",
   "icons/icon-192.png",
   "icons/apple-touch-icon.png",
-  "img/utensilios-640.webp",
-  "img/utensilios-1000.webp",
-  "img/u1-cacerola-pequena.webp",
-  "img/u2-jarro-rojo.webp",
-  "img/u3-prensa-francesa.webp",
-  "img/u4-tetera.webp",
-  "img/u5-cacerola-grande.webp",
-  "img/u6-cuchara.webp",
+  "img/utensilios-640.webp?v=3",
+  "img/utensilios-1000.webp?v=3",
   "img/completo.webp"
 ].concat(Array.from({ length: 10 }, (_, i) => `img/paso-${i + 1}-thumb.webp`),
          Array.from({ length: 10 }, (_, i) => `img/paso-${i + 1}-card.webp`),
@@ -60,4 +54,13 @@ self.addEventListener("fetch", (event) => {
       return res;
     }))
   );
+});
+
+// Al tocar el aviso de "¡Listo!", vuelve a la pestaña de la guía.
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
+    const c = list.find((w) => "focus" in w);
+    return c ? c.focus() : self.clients.openWindow("./");
+  }));
 });

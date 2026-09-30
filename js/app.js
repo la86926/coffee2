@@ -65,7 +65,7 @@
   paintBar();
 
   const navLinks = $$("[data-nav]");
-  const sections = ["metodo", "utensilios", "pasos", "completo", "alternativas"].map((id) => document.getElementById(id));
+  const sections = ["utensilios", "pasos", "completo", "otros"].map((id) => document.getElementById(id));
   if ("IntersectionObserver" in window) {
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
@@ -96,59 +96,27 @@
   } else reveals.forEach((el) => el.classList.add("in"));
 
   /* ------------------------------------------------------------------ Los 6 utensilios */
-  const tools = $$(".tool");
-  const tip = $("#benchTip");
-  const hotspots = $$(".hotspot");
-  const canHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  function setToolOpen(tool, open) {
-    tool.classList.toggle("open", open);
-    tool.querySelector(".tool-btn").setAttribute("aria-expanded", String(open));
+  // Números alineados bajo cada utensilio; el elegido muestra su función debajo.
+  const benchBtns = $$(".bench-n");
+  const benchDetail = $("#benchDetail");
+  function pickTool(btn) {
+    benchBtns.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+    const name = $(".nm", btn).textContent;
+    const tplEl = btn.nextElementSibling;
+    benchDetail.innerHTML = "";
+    const h = document.createElement("p"); h.className = "bd-t";
+    h.innerHTML = '<span class="n">' + btn.dataset.tool + "</span>";
+    h.appendChild(document.createTextNode(name));
+    const d = document.createElement("p"); d.className = "bd-d";
+    d.appendChild(tplEl.content.cloneNode(true));
+    benchDetail.append(h, d);
   }
-  tools.forEach((tool) => {
-    const btn = tool.querySelector(".tool-btn");
-    btn.addEventListener("click", () => {
-      const open = !tool.classList.contains("open");
-      if (!canHover) tools.forEach((t) => t !== tool && setToolOpen(t, false));
-      setToolOpen(tool, open);
-    });
-    if (canHover) {
-      tool.addEventListener("mouseenter", () => setToolOpen(tool, true));
-      tool.addEventListener("mouseleave", () => { if (!tool.contains(document.activeElement)) setToolOpen(tool, false); });
-      btn.addEventListener("blur", () => { if (!tool.matches(":hover")) setToolOpen(tool, false); });
-    }
+  benchBtns.forEach((b) => {
+    b.addEventListener("click", () => pickTool(b));
+    b.addEventListener("mouseenter", () => { if (matchMedia("(hover: hover)").matches) pickTool(b); });
   });
-  function closeTip() {
-    tip.hidden = true;
-    hotspots.forEach((h) => h.setAttribute("aria-expanded", "false"));
-    tools.forEach((t) => t.classList.remove("hl"));
-  }
-  hotspots.forEach((h) => {
-    h.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const was = h.getAttribute("aria-expanded") === "true";
-      closeTip();
-      if (was) return;
-      const tool = $(`.tool[data-tool="${h.dataset.tool}"]`);
-      const name = tool.querySelector(".tool-name").textContent;
-      const brief = tool.querySelector(".tool-brief").textContent;
-      const detail = tool.querySelector(".tool-detail").textContent;
-      tip.innerHTML = "";
-      const b = document.createElement("b"); b.textContent = h.dataset.tool + " · " + name;
-      const s = document.createElement("span"); s.textContent = detail;
-      tip.append(b, s);
-      tip.hidden = false;
-      if (matchMedia("(min-width: 1024px)").matches) {
-        const br = $("#bench").getBoundingClientRect(), hr = h.getBoundingClientRect();
-        const half = tip.offsetWidth / 2;
-        const x = Math.min(Math.max(hr.left + hr.width / 2 - br.left, half), br.width - half);
-        tip.style.left = x + "px"; tip.style.top = (hr.top - br.top) + "px";
-      } else { tip.style.left = ""; tip.style.top = ""; }
-      h.setAttribute("aria-expanded", "true");
-      tool.classList.add("hl");
-    });
-  });
-  document.addEventListener("click", (e) => { if (!tip.hidden && !e.target.closest(".bench-tip, .hotspot")) closeTip(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !tip.hidden) closeTip(); });
+  if (benchBtns[0]) pickTool(benchBtns[0]);
+  function closeTip() {}
 
   /* ------------------------------------------------------------------ Progreso de los pasos */
   const steps = $$(".step");
@@ -224,7 +192,8 @@
       liveTimer = this;
       keepAwake(true);
       announce(this.label + ": cronómetro iniciado, " + fmt(this.remaining) + ".");
-      this.tick();
+      askNotify();
+      this.tick(); saveTimers();
     }
     pause() {
       if (!this.running) return;
@@ -232,19 +201,19 @@
       this.running = false; clearInterval(this.iv);
       if (!anyRunning()) keepAwake(false);
       announce(this.label + ": en pausa, quedan " + fmt(this.remaining) + ".");
-      this.render();
+      this.render(); saveTimers();
     }
     reset(silent) {
       this.running = false; this.done = false; clearInterval(this.iv);
       this.remaining = this.duration;
       if (!anyRunning()) keepAwake(false);
       if (!silent) announce(this.label + ": reiniciado a " + fmt(this.duration) + ".");
-      this.render();
+      this.render(); saveTimers();
     }
     setDuration(s) {
       if (this.running) return;
       this.duration = s; this.remaining = s; this.done = false;
-      this.render();
+      this.render(); saveTimers();
     }
     tick() {
       if (!this.running) return;
@@ -255,6 +224,7 @@
         try { navigator.vibrate && navigator.vibrate([220, 120, 220, 120, 320]); } catch (_) {}
         chime();
         announce(this.label + ": ¡tiempo cumplido!");
+        notifyDone(this); saveTimers();
       }
       this.render();
     }
@@ -303,7 +273,7 @@
   }
   $$(".timer-compact").forEach((el) => bindTimer(el, timers[el.dataset.timer]));
 
-  function renderLive() {
+  function renderLiveBase() {
     const t = liveTimer;
     if (!t || !t.touched) { live.hidden = true; document.title = baseTitle; return; }
     live.hidden = false;
@@ -317,13 +287,175 @@
     document.title = t.done ? "✓ " + t.label + " · Mi café" : (t.running ? fmt(t.remaining) + " · " + t.label + " · Mi café" : baseTitle);
   }
   liveToggle.addEventListener("click", () => { const t = liveTimer; if (!t) return; t.running ? t.pause() : t.start(); });
-  $("#liveClose").addEventListener("click", () => { const t = liveTimer; if (!t) return; t.reset(true); liveTimer = null; renderLive(); });
+  $("#liveClose").addEventListener("click", () => { const t = liveTimer; if (!t) return; t.reset(true); liveTimer = null; renderLive(); saveTimers(); });
   $("#liveOpen").addEventListener("click", () => { if (liveTimer) openSheet(liveTimer.step, { focusTimer: true }); });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) return;
     Object.values(timers).forEach((t) => t.running && t.tick());
     if (anyRunning()) keepAwake(true);
   });
+
+
+  /* ---- Cronómetro flotante: se guarda, se arrastra y puede salir del navegador ---- */
+  // 1) Persistencia: si recargas o vuelves más tarde, sigue donde estaba (y se sincroniza entre pestañas).
+  function renderLive() { renderLiveBase(); renderFloat(); }
+  function saveTimers() {
+    const data = {};
+    Object.values(timers).forEach((t) => { data[t.id] = { d: t.duration, r: t.remaining, run: t.running, done: t.done, dl: t.deadline }; });
+    data.live = liveTimer ? liveTimer.id : null;
+    store.set("mc-timers", JSON.stringify(data));
+  }
+  function loadTimers(raw) {
+    let data; try { data = JSON.parse(raw || "null"); } catch (_) { data = null; }
+    if (!data) return;
+    Object.values(timers).forEach((t) => {
+      const s = data[t.id]; if (!s) return;
+      clearInterval(t.iv);
+      t.duration = s.d; t.done = !!s.done; t.running = false;
+      if (s.run && s.dl > Date.now()) {
+        t.deadline = s.dl; t.remaining = Math.ceil((s.dl - Date.now()) / 1000); t.running = true;
+        t.iv = setInterval(() => t.tick(), 250);
+      } else if (s.run) { t.remaining = 0; t.done = true; }
+      else t.remaining = s.r;
+      t.render();
+    });
+    liveTimer = data.live ? timers[data.live] : null;
+    if (anyRunning()) keepAwake(true);
+    renderLive();
+  }
+  loadTimers(store.get("mc-timers"));
+  addEventListener("storage", (e) => { if (e.key === "mc-timers") loadTimers(e.newValue); });
+
+  // 2) Aviso del sistema al terminar (si el navegador lo permite).
+  function askNotify() {
+    try { if ("Notification" in window && Notification.permission === "default") Notification.requestPermission(); } catch (_) {}
+  }
+  function notifyDone(t) {
+    try {
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
+      const body = t.id === "t3" ? "Pasaron los 2 minutos: retira la tapa y el émbolo." : "Terminó la infusión: baja el émbolo lentamente.";
+      const opts = { body, icon: "icons/icon-192.png", badge: "icons/icon-192.png", tag: "mi-cafe-timer", renotify: true, vibrate: [220, 120, 220, 120, 320] };
+      if (navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then((r) => r.showNotification("¡Listo! · " + t.label, opts)).catch(() => new Notification("¡Listo! · " + t.label, opts));
+      else new Notification("¡Listo! · " + t.label, opts);
+    } catch (_) {}
+  }
+
+  // 3) Arrastrar con el dedo o el ratón a cualquier parte de la pantalla.
+  (function draggable() {
+    let sx = 0, sy = 0, ox = 0, oy = 0, drag = false, down = false, moved = false;
+    const place = (x, y) => {
+      const w = live.offsetWidth, h = live.offsetHeight, m = 8;
+      x = Math.min(Math.max(m, x), innerWidth - w - m);
+      y = Math.min(Math.max(m, y), innerHeight - h - m);
+      live.style.left = x + "px"; live.style.top = y + "px";
+      live.classList.add("moved");
+      return [x, y];
+    };
+    const saved = (() => { try { return JSON.parse(store.get("mc-live-pos") || "null"); } catch (_) { return null; } })();
+    const restore = () => { if (saved && !live.hidden) place(saved[0] * innerWidth, saved[1] * innerHeight); };
+    new MutationObserver(restore).observe(live, { attributes: true, attributeFilter: ["hidden"] });
+    restore();
+    addEventListener("resize", () => { if (live.classList.contains("moved")) { const r = live.getBoundingClientRect(); place(r.left, r.top); } });
+    live.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      down = true; drag = false; moved = false;
+      const r = live.getBoundingClientRect(); sx = e.clientX; sy = e.clientY; ox = r.left; oy = r.top;
+    });
+    addEventListener("pointermove", (e) => {
+      if (!down) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!drag && Math.hypot(dx, dy) > 6) { drag = true; live.classList.add("dragging"); try { live.setPointerCapture(e.pointerId); } catch (_) {} }
+      if (drag) { e.preventDefault(); place(ox + dx, oy + dy); }
+    }, { passive: false });
+    const end = () => {
+      if (!down) return; down = false;
+      if (drag) {
+        moved = true; live.classList.remove("dragging");
+        const r = live.getBoundingClientRect();
+        store.set("mc-live-pos", JSON.stringify([r.left / innerWidth, r.top / innerHeight]));
+        setTimeout(() => { moved = false; }, 60);
+      }
+    };
+    addEventListener("pointerup", end); addEventListener("pointercancel", end);
+    live.addEventListener("click", (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); } }, true);
+    live.addEventListener("touchmove", (e) => { if (down) e.preventDefault(); }, { passive: false });
+  })();
+
+  // 4) Encima de otras ventanas: Document Picture-in-Picture (Chrome/Edge de escritorio)
+  //    o, si no existe, un video Picture-in-Picture dibujado (p. ej. Chrome en Android).
+  const floatBtn = $("#liveFloat");
+  const canDocPip = "documentPictureInPicture" in window;
+  var pipCanvas = document.createElement("canvas");
+  const canVideoPip = !!(document.pictureInPictureEnabled && pipCanvas.captureStream);
+  var pipWin = null, pipVideo = null;
+  floatBtn.hidden = !(canDocPip || canVideoPip);
+
+  function drawPip() {
+    const t = liveTimer; if (!t) return;
+    const time = t.done ? "¡Listo!" : fmt(t.remaining);
+    const label = t.label + (t.running ? "" : t.done ? "" : " · en pausa");
+    if (pipWin && !pipWin.closed) {
+      const d = pipWin.document;
+      d.getElementById("pt").textContent = time;
+      d.getElementById("pl").textContent = label;
+      d.getElementById("pb").textContent = t.running ? "Pausar" : (t.done ? "Otra vez" : "Seguir");
+      d.getElementById("pr").style.width = (t.done ? 100 : (1 - t.remaining / t.duration) * 100) + "%";
+      d.body.classList.toggle("done", t.done);
+    }
+    if (pipVideo) {
+      const c = pipCanvas, g = c.getContext("2d");
+      g.fillStyle = t.done ? "#1f5e3a" : "#181513"; g.fillRect(0, 0, c.width, c.height);
+      g.fillStyle = "rgba(255,255,255,.14)"; g.fillRect(40, 250, 560, 10);
+      g.fillStyle = t.done ? "#4cd07d" : "#d9a270"; g.fillRect(40, 250, 560 * (t.done ? 1 : 1 - t.remaining / t.duration), 10);
+      g.fillStyle = "#fff"; g.textAlign = "center"; g.font = "700 120px system-ui, -apple-system, sans-serif";
+      g.fillText(time, 320, 180);
+      g.fillStyle = "rgba(255,255,255,.72)"; g.font = "500 34px system-ui, -apple-system, sans-serif";
+      g.fillText(label, 320, 320);
+    }
+  }
+  async function openFloat() {
+    const t = liveTimer; if (!t) return;
+    if (canDocPip) {
+      try {
+        pipWin = await documentPictureInPicture.requestWindow({ width: 300, height: 170 });
+        const d = pipWin.document;
+        d.head.innerHTML = '<meta charset="utf-8"><title>Mi café · cronómetro</title><style>' +
+          'html,body{margin:0;height:100%}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:#181513;color:#fff;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:16px 18px;box-sizing:border-box}' +
+          'body.done{background:#1f5e3a}#pl{font-size:14px;color:rgba(255,255,255,.72)}#pt{font-size:52px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}' +
+          '.bar{height:6px;border-radius:6px;background:rgba(255,255,255,.14);overflow:hidden}#pr{height:100%;background:#d9a270}body.done #pr{background:#4cd07d}' +
+          '.row{display:flex;gap:8px}button{flex:1;font:inherit;font-size:14px;font-weight:600;color:#fff;background:rgba(255,255,255,.16);border:0;border-radius:999px;padding:9px 0;cursor:pointer}</style>';
+        d.body.innerHTML = '<div id="pl"></div><div id="pt"></div><div class="bar"><div id="pr"></div></div><div class="row"><button id="pb"></button><button id="pc">Cerrar</button></div>';
+        d.getElementById("pb").onclick = () => { const x = liveTimer; if (!x) return; x.running ? x.pause() : x.start(); };
+        d.getElementById("pc").onclick = () => { const x = liveTimer; if (x) { x.reset(true); liveTimer = null; renderLive(); saveTimers(); } pipWin.close(); };
+        pipWin.addEventListener("pagehide", () => { pipWin = null; });
+        drawPip();
+        return;
+      } catch (_) { pipWin = null; }
+    }
+    if (canVideoPip) {
+      try {
+        pipCanvas.width = 640; pipCanvas.height = 360;
+        if (!pipVideo) {
+          pipVideo = document.createElement("video");
+          pipVideo.muted = true; pipVideo.playsInline = true;
+          pipVideo.srcObject = pipCanvas.captureStream(4);
+          pipVideo.addEventListener("leavepictureinpicture", () => { pipVideo.pause(); pipVideo = null; });
+        }
+        drawPip();
+        await pipVideo.play();
+        await pipVideo.requestPictureInPicture();
+        if ("mediaSession" in navigator) {
+          navigator.mediaSession.setActionHandler("play", () => liveTimer && liveTimer.start());
+          navigator.mediaSession.setActionHandler("pause", () => liveTimer && liveTimer.pause());
+        }
+      } catch (_) { pipVideo = null; }
+    }
+  }
+  floatBtn.addEventListener("click", openFloat);
+  function renderFloat() {
+    if (!liveTimer) { if (pipWin && !pipWin.closed) pipWin.close(); if (pipVideo && document.pictureInPictureElement) document.exitPictureInPicture().catch(() => {}); return; }
+    drawPip();
+  };
 
   /* ------------------------------------------------------------------ Hoja de detalle */
   const sheet = $("#sheet");
@@ -377,7 +509,6 @@
     sheetVideo.poster = "img/paso-" + n + ".webp" + mv;
     sheetVideo.src = "videos/coffee" + n + ".mp4" + mv;
     sheetVideo.setAttribute("aria-label", "Video del paso " + n + ": " + titleOf(n));
-    $("#sheetYt").href = "https://youtube.com/shorts/" + el.dataset.yt;
     // Navegación
     prevBtn.disabled = n === 1; nextBtn.disabled = n === 10;
     $("#prevTitle").textContent = n > 1 ? titleOf(n - 1) : "—";

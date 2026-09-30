@@ -1,7 +1,7 @@
 # Mi café · Prensa francesa
 
 Web personal que explica **mi** método para preparar café con prensa francesa:
-dos aguas, seis utensilios y diez pasos.
+seis utensilios y diez pasos.
 
 **Sitio:** https://la86926.github.io/coffee2/
 
