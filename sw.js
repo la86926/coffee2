@@ -1,21 +1,17 @@
 /* Service worker ligero: la guía abre sin conexión (textos, portadas y
    cronómetros). Los videos no se guardan en caché: se piden a la red. */
-const VERSION = "mi-cafe-v1.0.8";
+const VERSION = "mi-cafe-v1.0.9";
 const SHELL = [
   "./",
   "index.html",
-  "css/styles.css?v=1.0.8",
-  "js/app.js?v=1.0.8",
+  "css/styles.css?v=1.0.9",
+  "js/app.js?v=1.0.9",
   "manifest.webmanifest",
   "icons/icon.svg",
   "icons/icon-192.png",
-  "icons/apple-touch-icon.png",
   "img/utensilios-640.webp?v=3",
-  "img/utensilios-1000.webp?v=3",
-  "img/completo.webp"
-].concat(Array.from({ length: 10 }, (_, i) => `img/paso-${i + 1}-thumb.webp`),
-         Array.from({ length: 10 }, (_, i) => `img/paso-${i + 1}-card.webp`),
-         Array.from({ length: 10 }, (_, i) => `img/paso-${i + 1}.webp`));
+  "img/utensilios-1000.webp?v=3"
+]; // lo mínimo: el resto de imágenes se guarda solo cuando se ve (no compite con la primera carga)
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
