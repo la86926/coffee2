@@ -622,8 +622,13 @@
     const n = Number(el.dataset.step);
     $("[data-play]", el).addEventListener("click", (e) => { e.preventDefault(); openSheet(n, { autoplay: true }); });
     $(".full summary", el).addEventListener("click", (e) => { e.preventDefault(); openSheet(n); });
+    // Toda la tarjeta abre el paso (salvo los botones del cronómetro).
+    el.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.target.closest(".timer, button, a, summary")) return;
+      openSheet(n, { autoplay: true });
+    });
   });
-  $$("[data-open]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); openSheet(Number(a.dataset.open)); }));
+  $$("[data-open]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); openSheet(Number(a.dataset.open), { autoplay: true }); }));
 
   /* ------------------------------------------------------------------ Video completo */
   const player = $("#player"), playerVideo = $("#playerVideo");

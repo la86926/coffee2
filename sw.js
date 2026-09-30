@@ -1,11 +1,11 @@
 /* Service worker ligero: la guía abre sin conexión (textos, portadas y
    cronómetros). Los videos no se guardan en caché: se piden a la red. */
-const VERSION = "mi-cafe-v1.0.7";
+const VERSION = "mi-cafe-v1.0.8";
 const SHELL = [
   "./",
   "index.html",
-  "css/styles.css?v=1.0.7",
-  "js/app.js?v=1.0.7",
+  "css/styles.css?v=1.0.8",
+  "js/app.js?v=1.0.8",
   "manifest.webmanifest",
   "icons/icon.svg",
   "icons/icon-192.png",

@@ -760,3 +760,5 @@ dialog::backdrop { background: rgba(10, 8, 6, .45); -webkit-backdrop-filter: blu
 .bench-row, .bench-n { touch-action: pan-y; -webkit-user-select: none; user-select: none; }
 .sheet .live, .player .live { z-index: 60; }
 .tabbar a span { white-space: nowrap; }
+.step { cursor: pointer; }
+.step .timer { cursor: default; }
