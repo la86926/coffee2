@@ -308,7 +308,7 @@
 
   /* ---- Cronómetro flotante: se guarda, se arrastra y puede salir del navegador ---- */
   // 1) Persistencia: si recargas o vuelves más tarde, sigue donde estaba (y se sincroniza entre pestañas).
-  function renderLive() { renderLiveBase(); renderFloat(); }
+  function renderLive() { renderLiveBase(); }
   function saveTimers() {
     const data = {};
     Object.values(timers).forEach((t) => { data[t.id] = { d: t.duration, r: t.remaining, run: t.running, done: t.done, dl: t.deadline }; });
@@ -391,81 +391,6 @@
     live.addEventListener("touchmove", (e) => { if (down) e.preventDefault(); }, { passive: false });
   })();
 
-  // 4) Encima de otras ventanas: Document Picture-in-Picture (Chrome/Edge de escritorio)
-  //    o, si no existe, un video Picture-in-Picture dibujado (p. ej. Chrome en Android).
-  const floatBtn = $("#liveFloat");
-  const canDocPip = "documentPictureInPicture" in window;
-  var pipCanvas = document.createElement("canvas");
-  const canVideoPip = !!(document.pictureInPictureEnabled && pipCanvas.captureStream);
-  var pipWin = null, pipVideo = null;
-  floatBtn.hidden = !(canDocPip || canVideoPip);
-
-  function drawPip() {
-    const t = liveTimer; if (!t) return;
-    const time = t.done ? "¡Listo!" : fmt(t.remaining);
-    const label = t.label + (t.running ? "" : t.done ? "" : " · en pausa");
-    if (pipWin && !pipWin.closed) {
-      const d = pipWin.document;
-      d.getElementById("pt").textContent = time;
-      d.getElementById("pl").textContent = label;
-      d.getElementById("pb").textContent = t.running ? "Pausar" : (t.done ? "Otra vez" : "Seguir");
-      d.getElementById("pr").style.width = (t.done ? 100 : (1 - t.remaining / t.duration) * 100) + "%";
-      d.body.classList.toggle("done", t.done);
-    }
-    if (pipVideo) {
-      const c = pipCanvas, g = c.getContext("2d");
-      g.fillStyle = t.done ? "#1f5e3a" : "#181513"; g.fillRect(0, 0, c.width, c.height);
-      g.fillStyle = "rgba(255,255,255,.14)"; g.fillRect(40, 250, 560, 10);
-      g.fillStyle = t.done ? "#4cd07d" : "#d9a270"; g.fillRect(40, 250, 560 * (t.done ? 1 : 1 - t.remaining / t.duration), 10);
-      g.fillStyle = "#fff"; g.textAlign = "center"; g.font = "700 120px system-ui, -apple-system, sans-serif";
-      g.fillText(time, 320, 180);
-      g.fillStyle = "rgba(255,255,255,.72)"; g.font = "500 34px system-ui, -apple-system, sans-serif";
-      g.fillText(label, 320, 320);
-    }
-  }
-  async function openFloat() {
-    const t = liveTimer; if (!t) return;
-    if (canDocPip) {
-      try {
-        pipWin = await documentPictureInPicture.requestWindow({ width: 300, height: 170 });
-        const d = pipWin.document;
-        d.head.innerHTML = '<meta charset="utf-8"><title>Mi café · cronómetro</title><style>' +
-          'html,body{margin:0;height:100%}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:#181513;color:#fff;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:16px 18px;box-sizing:border-box}' +
-          'body.done{background:#1f5e3a}#pl{font-size:14px;color:rgba(255,255,255,.72)}#pt{font-size:52px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}' +
-          '.bar{height:6px;border-radius:6px;background:rgba(255,255,255,.14);overflow:hidden}#pr{height:100%;background:#d9a270}body.done #pr{background:#4cd07d}' +
-          '.row{display:flex;gap:8px}button{flex:1;font:inherit;font-size:14px;font-weight:600;color:#fff;background:rgba(255,255,255,.16);border:0;border-radius:999px;padding:9px 0;cursor:pointer}</style>';
-        d.body.innerHTML = '<div id="pl"></div><div id="pt"></div><div class="bar"><div id="pr"></div></div><div class="row"><button id="pb"></button><button id="pc">Cerrar</button></div>';
-        d.getElementById("pb").onclick = () => { const x = liveTimer; if (!x) return; x.running ? x.pause() : x.start(); };
-        d.getElementById("pc").onclick = () => { const x = liveTimer; if (x) { x.reset(true); liveTimer = null; renderLive(); saveTimers(); } pipWin.close(); };
-        pipWin.addEventListener("pagehide", () => { pipWin = null; });
-        drawPip();
-        return;
-      } catch (_) { pipWin = null; }
-    }
-    if (canVideoPip) {
-      try {
-        pipCanvas.width = 640; pipCanvas.height = 360;
-        if (!pipVideo) {
-          pipVideo = document.createElement("video");
-          pipVideo.muted = true; pipVideo.playsInline = true;
-          pipVideo.srcObject = pipCanvas.captureStream(4);
-          pipVideo.addEventListener("leavepictureinpicture", () => { pipVideo.pause(); pipVideo = null; });
-        }
-        drawPip();
-        await pipVideo.play();
-        await pipVideo.requestPictureInPicture();
-        if ("mediaSession" in navigator) {
-          navigator.mediaSession.setActionHandler("play", () => liveTimer && liveTimer.start());
-          navigator.mediaSession.setActionHandler("pause", () => liveTimer && liveTimer.pause());
-        }
-      } catch (_) { pipVideo = null; }
-    }
-  }
-  floatBtn.addEventListener("click", openFloat);
-  function renderFloat() {
-    if (!liveTimer) { if (pipWin && !pipWin.closed) pipWin.close(); if (pipVideo && document.pictureInPictureElement) document.exitPictureInPicture().catch(() => {}); return; }
-    drawPip();
-  };
 
   /* ------------------------------------------------------------------ Hoja de detalle */
   const sheet = $("#sheet");
